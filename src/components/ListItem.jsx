@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 
 class ListItem extends React.Component {
   constructor() {
@@ -11,16 +12,16 @@ class ListItem extends React.Component {
   }
 
   render() {
-    const { name, famousStatement, url } = this.props.element;
+    const { id, name, famousStatement, url } = this.props.element;
     return (
       <div>
         <div className="row">
-          <img className="col-md-2 img-rounded" alt="User avatar" src={url} width="10%" />
-          <div className="col-md-6">
-            <h3>{name}</h3>
+          <img className="col-sm-2 col-md-2 img-rounded" alt="User avatar" src={url} width="10%" />
+          <div className="col-sm-6 col-md-6">
+            <h3><Link to={`/edit/${id}`}>{name}</Link></h3>
             <p>{famousStatement}</p>
           </div>
-          <button className="col-md-2 btn btn-default" onClick={this.onDelete} >Delete</button>
+          <button className="col-sm-2 col-md-2 btn btn-default" onClick={this.onDelete} >Delete</button>
         </div>
         <hr />
       </div>

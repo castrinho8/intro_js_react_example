@@ -1,32 +1,34 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+
 import ListItem from './ListItem';
 import simpsonList from '../constants/simpsonList';
+import SimpsonListActions from '../actions/simpson-list-actions';
 
 class CharacterList extends Component {
   constructor () {
     super();
-    this.state = {
-      characters: simpsonList,
-    };
     this.onDelete = this.onDelete.bind(this);
     this.resetList = this.resetList.bind(this);
   }
 
   onDelete(id) {
-    const filteredUsers = this.state.characters.filter((element) => element.id !== id);
-    this.setState({
-      characters: filteredUsers,
-    });
+    const { removeItem } = this.props.actions;
+    if (removeItem) {
+      removeItem(id);
+    }
   }
 
   resetList() {
-    this.setState({
-      characters: simpsonList,
-    });
+    const { resetList } = this.props.actions;
+    if (resetList) {
+      resetList();
+    }
   }
 
   render() {
-    const { characters } = this.state;
+    const { characters } = this.props;
     const renderElements = characters.map((element) => (
       <ListItem
         key={element.id}
@@ -45,4 +47,24 @@ class CharacterList extends Component {
   }
 }
 
-export default CharacterList;
+CharacterList.propTypes = {
+  actions: PropTypes.object.isRequired,
+  characters: PropTypes.array.isRequired
+};
+
+function mapStateToProps(state) {
+  return {
+    characters: state.simpsonListReducer.items,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(SimpsonListActions, dispatch)
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CharacterList);
